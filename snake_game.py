@@ -172,6 +172,11 @@ class Game(object):
             }
 
             key = self.read_key()
+
+            if key == 'q':
+                sys.stdout.write('Bye!\n')
+                break
+
             try:
                 new_direction = keymap[key]
             except KeyError:
