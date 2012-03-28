@@ -40,7 +40,6 @@ class Map(object):
             sys.stdout.write('\n')
 
 
-
 class Snake(object):
     def __init__(self):
         self.positions = [[5, 3], [5, 4], [5, 5]]

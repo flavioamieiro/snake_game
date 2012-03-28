@@ -13,7 +13,6 @@ class TestSnake(unittest.TestCase):
         self.assertEqual(snake.positions, [[5, 4], [5, 5], [5, 6]])
 
 
-
 class TestGame(unittest.TestCase):
     def test_end_game_if_the_snake_hits_a_wall(self):
         game = Game()
