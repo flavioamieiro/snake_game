@@ -29,11 +29,18 @@ class Map(object):
 
 
 class Snake(object):
-    positions = [[5, 3], [5, 4], [5, 5]]
+    def __init__(self):
+        self.positions = [[5, 3], [5, 4], [5, 5]]
 
+    def move_down(self):
+        for n, pos in enumerate(self.positions):
+            pos[1] += 1
+            self.positions[n] = pos
 
 if __name__ == '__main__':
     snake = Snake()
     snake_map = Map()
-    snake_map.update(snake.positions)
-    snake_map.draw()
+    while True:
+        snake.move_down()
+        snake_map.update(snake.positions)
+        snake_map.draw()
