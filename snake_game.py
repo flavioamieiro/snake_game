@@ -30,6 +30,20 @@ import sys
 
 TIMEOUT = 0.1 # in seconds
 
+VIM_KEYMAP = {
+    'h': 'left',
+    'j': 'down',
+    'k': 'up',
+    'l': 'right',
+}
+
+FPS_KEYMAP = {
+    'a': 'left',
+    's': 'down',
+    'w': 'up',
+    'd': 'right',
+}
+
 class GameOver(Exception):
     pass
 
@@ -119,11 +133,12 @@ class Snake(object):
 
 
 class Game(object):
-    def __init__(self):
+    def __init__(self, keymap=FPS_KEYMAP):
         self.snake = Snake()
         self.map = Map()
         self.timeout = TIMEOUT
         self.fruit_position = self.random_fruit_position()
+        self.keymap = keymap
 
     @property
     def invalid_position(self):
@@ -194,6 +209,14 @@ class Game(object):
         y = random.randint(0, self.map.height - 1)
         return [x, y]
 
+    def show_keymap(self):
+        output = "\n| "
+        for key, value in self.keymap.items():
+            output += "{0}: {1} | ".format(key, value)
+
+        output += "\n"
+        sys.stdout.write(output)
+
     def play(self):
         self.map.update([self.fruit_position], 'x')
         self.map.update(self.snake.positions)
@@ -202,13 +225,6 @@ class Game(object):
         while True:
             sys.stdout.write('\n')
 
-            keymap = {
-                'h': 'left',
-                'j': 'down',
-                'k': 'up',
-                'l': 'right',
-            }
-
             key = self.read_key()
 
             if key == 'q':
@@ -216,7 +232,7 @@ class Game(object):
                 break
 
             try:
-                new_direction = keymap[key]
+                new_direction = self.keymap[key]
             except KeyError:
                 new_direction = self.snake.direction
 
@@ -232,12 +248,19 @@ class Game(object):
             self.map.clear()
             self.map.update([self.fruit_position], 'x')
             self.map.update(self.snake.positions)
-            sys.stdout.write("\nh: left | j: down | k: up | l: right\n")
+            self.show_keymap()
             self.map.draw()
 
 
 if __name__ == '__main__':
-    game = Game()
+
+    if '--vim' in sys.argv:
+        keymap = VIM_KEYMAP
+    else:
+        keymap = FPS_KEYMAP
+
+    game = Game(keymap)
+
     try:
         game.play()
     except GameOver as exc:
