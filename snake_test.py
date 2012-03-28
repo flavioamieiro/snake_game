@@ -118,6 +118,13 @@ class TestGame(unittest.TestCase):
         game.snake.positions[0] = [5, -1]
         self.assertTrue(game.invalid_position)
 
+    def test_invalid_position_if_snake_hits_itself(self):
+        game = Game()
+        game.snake.positions[0] = [3, 3]
+        game.snake.positions[1] = [3, 3]
+
+        self.assertTrue(game.invalid_position)
+
 
 if __name__ == '__main__':
     unittest.main(buffer=True)

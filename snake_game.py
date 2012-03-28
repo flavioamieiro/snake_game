@@ -46,6 +46,14 @@ class Snake(object):
         self.positions = copy.deepcopy(initial_positions) or [[5, 3], [5, 4], [5, 5]]
         self.direction = direction
 
+    @property
+    def head_x(self):
+        return self.positions[-1][0]
+
+    @property
+    def head_y(self):
+        return self.positions[-1][1]
+
     def direction_conflicts(self, new_direction):
         conflicts = {
             'left': 'right',
@@ -79,6 +87,13 @@ class Snake(object):
         self.positions.append(new_head)
         self.direction = new_direction
 
+    def grow(self):
+        old_tail = self.positions[0]
+        x = old_tail[0]
+        y = old_tail[1]
+        new_tail = [x, y]
+        self.positions.insert(0, new_tail)
+
 
 class Game(object):
     def __init__(self):
@@ -103,6 +118,9 @@ class Game(object):
             # we should not have a part of the snake through the right
             # of the map
             elif (pos[1] >= self.map.width):
+                return True
+
+            elif self.snake.positions.count(pos) > 1:
                 return True
 
         return False
@@ -182,7 +200,11 @@ class Game(object):
             self.snake.move(new_direction)
 
             if self.invalid_position:
-                raise GameOver("You've hit a wall. Your game is over!\n")
+                raise GameOver("Game Over!\n")
+
+            if self.map.grid[self.snake.head_y][self.snake.head_x] == 'x':
+                self.snake.grow()
+                self.fruit_position = self.random_fruit_position()
 
             self.map.clear()
             self.map.update([self.fruit_position], 'x')
