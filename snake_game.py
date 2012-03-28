@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
+import copy
 import sys
 
 class GameOver(Exception):
     pass
 
 class Map(object):
-    grid = [
+    initial_grid = [
         ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
         ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
         ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
@@ -19,7 +20,14 @@ class Map(object):
         ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
         ]
 
+    def __init__(self):
+        self.grid = copy.deepcopy(self.initial_grid)
+
+    def clear(self):
+        self.grid = copy.deepcopy(self.initial_grid)
+
     def update(self, positions, char='O'):
+        self.clear()
         for pos in positions:
             x = pos[0]
             y = pos[1]
@@ -53,13 +61,13 @@ class Game(object):
         self.map.draw()
 
         while True:
+            sys.stdout.write('\n')
             self.snake.move_down()
             try:
                 self.map.update(self.snake.positions)
             except IndexError:
                 raise GameOver("You've hit a wall. Your game is over!\n")
             self.map.draw()
-            sys.stdout.write('\n')
 
 
 if __name__ == '__main__':
