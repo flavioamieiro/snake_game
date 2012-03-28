@@ -50,6 +50,12 @@ class Snake(object):
             pos[1] += 1
             self.positions[n] = pos
 
+    def move_left(self):
+        tail = self.positions.pop(0) # remove the 'tail'
+        previous_head = self.positions[-1]
+        new_head = [(previous_head[0] - 1), previous_head[1]]
+        self.positions.append(new_head)
+
 
 class Game(object):
     def __init__(self):
