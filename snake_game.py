@@ -50,8 +50,8 @@ class Map(object):
 
 
 class Snake(object):
-    def __init__(self):
-        self.positions = [[5, 3], [5, 4], [5, 5]]
+    def __init__(self, initial_positions=None):
+        self.positions = initial_positions or [[5, 3], [5, 4], [5, 5]]
 
     def move(self, new_direction):
         tail = self.positions.pop(0) # remove the 'tail'

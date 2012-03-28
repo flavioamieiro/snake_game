@@ -7,14 +7,18 @@ class TestSnake(unittest.TestCase):
         snake = Snake()
         self.assertEqual(snake.positions, [[5, 3], [5, 4], [5, 5]])
 
+    def test_snake_can_be_initialized_with_position(self):
+        positions = [[5, 3], [6, 3], [6, 4]]
+        snake = Snake(positions)
+        self.assertEqual(snake.positions, positions)
+
     def test_move_snake_down_from_initial_position(self):
         snake = Snake()
         snake.move('down')
         self.assertEqual(snake.positions, [[5, 4], [5, 5], [5, 6]])
 
     def test_move_horizontal_snake_down(self):
-        snake = Snake()
-        snake.positions = [[4, 3], [5, 3], [6, 3]]
+        snake = Snake([[4, 3], [5, 3], [6, 3]])
         snake.move('down')
         self.assertEqual(snake.positions, [[5, 3], [6, 3], [6, 4]])
 
