@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 class Map(object):
     grid = [
         ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
@@ -23,8 +24,8 @@ class Map(object):
     def draw(self):
         for row in self.grid:
             for cell in row:
-                print(cell, end='')
-            print('\n')
+                sys.stdout.write(cell)
+            sys.stdout.write('\n')
 
 
 
