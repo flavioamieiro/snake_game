@@ -16,55 +16,65 @@ class TestSnake(unittest.TestCase):
         snake = Snake()
         snake.move('down')
         self.assertEqual(snake.positions, [[5, 4], [5, 5], [5, 6]])
+        self.assertEqual(snake.direction, 'down')
 
     def test_move_horizontal_snake_down(self):
         snake = Snake([[4, 3], [5, 3], [6, 3]])
         snake.move('down')
         self.assertEqual(snake.positions, [[5, 3], [6, 3], [6, 4]])
+        self.assertEqual(snake.direction, 'down')
 
     def test_move_snake_up(self):
         snake = Snake([[5, 5], [5, 4], [5, 3]], direction='up')
         snake.move('up')
         self.assertEqual(snake.positions, [[5, 4], [5, 3], [5, 2]])
+        self.assertEqual(snake.direction, 'up')
 
     def test_move_horizontal_snake_up(self):
         snake = Snake([[4, 3], [5, 3], [6, 3]], direction='right')
         snake.move('up')
         self.assertEqual(snake.positions, [[5, 3], [6, 3], [6, 2]])
+        self.assertEqual(snake.direction, 'up')
 
     def test_move_snake_left_from_initial_position(self):
         snake = Snake()
         snake.move('left')
         self.assertEqual(snake.positions, [[5, 4], [5, 5], [4, 5]])
+        self.assertEqual(snake.direction, 'left')
 
     def test_move_snake_right_from_initial_position(self):
         snake = Snake()
         snake.move('right')
         self.assertEqual(snake.positions, [[5, 4], [5, 5], [6, 5]])
+        self.assertEqual(snake.direction, 'right')
 
-    def test_cant_move_right_if_going_left(self):
+    def test_should_keep_direction_when_trying_to_move_right_if_going_left(self):
         positions = [[6, 3], [5, 3], [4, 3]]
         snake = Snake(initial_positions=positions, direction='left')
         snake.move('right')
-        self.assertEqual(snake.positions, positions) # nothing happened
+        self.assertEqual(snake.positions, [[5, 3], [4, 3], [3, 3]])
+        self.assertEqual(snake.direction, 'left')
 
-    def test_cant_move_left_if_going_right(self):
+    def test_should_keep_direction_when_trying_to_move_left_if_going_right(self):
         positions = [[4, 3], [5, 3], [6, 3]]
         snake = Snake(initial_positions=positions, direction='right')
         snake.move('left')
-        self.assertEqual(snake.positions, positions) # nothing happened
+        self.assertEqual(snake.positions, [[5, 3], [6, 3], [7, 3]])
+        self.assertEqual(snake.direction, 'right')
 
-    def test_cant_move_up_if_going_down(self):
+    def test_should_keep_direction_when_trying_to_move_up_if_going_down(self):
         initial_positions = [[5, 3], [5, 4], [5, 5]]
         snake = Snake()
         snake.move('up')
-        self.assertEqual(snake.positions, initial_positions) # nothing happened
+        self.assertEqual(snake.positions, [[5, 4], [5, 5], [5, 6]])
+        self.assertEqual(snake.direction, 'down')
 
-    def test_cant_move_down_if_going_up(self):
+    def test_should_keep_direction_when_trying_to_move_down_if_going_up(self):
         positions = [[5, 5], [5, 4], [5, 3]]
         snake = Snake(initial_positions=positions, direction='up')
         snake.move('down')
-        self.assertEqual(snake.positions, positions) # nothing happened
+        self.assertEqual(snake.positions, [[5, 4], [5, 3], [5, 2]])
+        self.assertEqual(snake.direction, 'up')
 
 
 class TestGame(unittest.TestCase):

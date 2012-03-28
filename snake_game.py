@@ -64,23 +64,28 @@ class Snake(object):
         return conflicts[self.direction] == new_direction
 
     def move(self, new_direction):
-        if not self.direction_conflicts(new_direction):
-            tail = self.positions.pop(0) # remove the 'tail'
-            previous_head = self.positions[-1]
+        # we should keep the old direction if the new one conflicts
+        # with it, but still move it
+        if self.direction_conflicts(new_direction):
+            new_direction = self.direction
 
-            if new_direction == 'up':
-                new_head = [previous_head[0], (previous_head[1] - 1)]
+        tail = self.positions.pop(0) # remove the 'tail'
+        previous_head = self.positions[-1]
 
-            if new_direction == 'down':
-                new_head = [previous_head[0], (previous_head[1] + 1)]
+        if new_direction == 'up':
+            new_head = [previous_head[0], (previous_head[1] - 1)]
 
-            elif new_direction == 'left':
-                new_head = [(previous_head[0] - 1), previous_head[1]]
+        if new_direction == 'down':
+            new_head = [previous_head[0], (previous_head[1] + 1)]
 
-            elif new_direction == 'right':
-                new_head = [(previous_head[0] + 1), previous_head[1]]
+        elif new_direction == 'left':
+            new_head = [(previous_head[0] - 1), previous_head[1]]
 
-            self.positions.append(new_head)
+        elif new_direction == 'right':
+            new_head = [(previous_head[0] + 1), previous_head[1]]
+
+        self.positions.append(new_head)
+        self.direction = new_direction
 
 
 class Game(object):
