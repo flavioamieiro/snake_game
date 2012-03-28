@@ -24,6 +24,14 @@ class Map(object):
     def __init__(self):
         self.grid = copy.deepcopy(self.initial_grid)
 
+    @property
+    def width(self):
+        return len(self.grid[0])
+
+    @property
+    def height(self):
+        return len(self.grid)
+
     def clear(self):
         self.grid = copy.deepcopy(self.initial_grid)
 
@@ -62,6 +70,26 @@ class Game(object):
         self.snake = Snake()
         self.map = Map()
 
+    @property
+    def invalid_position(self):
+        for pos in self.snake.positions:
+            # negative indexes are not allowed (this takes care of the
+            # snake going out through the top and the left of the map)
+            if (pos[0] < 0) or (pos[1] < 0):
+                return True
+
+            # we should not have a part of the snake through the
+            # bottom of the map
+            elif (pos[0] >= self.map.height):
+                return True
+
+            # we should not have a part of the snake through the right
+            # of the map
+            elif (pos[1] >= self.map.width):
+                return True
+
+        return False
+
     def play(self):
         self.map.update(self.snake.positions)
         self.map.draw()
@@ -69,10 +97,11 @@ class Game(object):
         while True:
             sys.stdout.write('\n')
             self.snake.move_down()
-            try:
-                self.map.update(self.snake.positions)
-            except IndexError:
+
+            if self.invalid_position:
                 raise GameOver("You've hit a wall. Your game is over!\n")
+
+            self.map.update(self.snake.positions)
             self.map.draw()
             time.sleep(1)
 
