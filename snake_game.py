@@ -55,10 +55,13 @@ class Snake(object):
         self.direction = direction
 
     def direction_conflicts(self, new_direction):
-        if (self.direction == 'left') and (new_direction == 'right'):
-            return True
-        else:
-            return False
+        conflicts = {
+            'left': 'right',
+            'right': 'left',
+            'down': 'up',
+            'up': 'down',
+        }
+        return conflicts[self.direction] == new_direction
 
     def move(self, new_direction):
         if not self.direction_conflicts(new_direction):

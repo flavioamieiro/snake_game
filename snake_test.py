@@ -38,6 +38,12 @@ class TestSnake(unittest.TestCase):
         snake.move('right')
         self.assertEqual(snake.positions, positions) # nothing happened
 
+    def test_cant_move_left_if_going_right(self):
+        positions = [[4, 3], [5, 3], [6, 3]]
+        snake = Snake(initial_positions=positions, direction='right')
+        snake.move('left')
+        self.assertEqual(snake.positions, positions) # nothing happened
+
 
 class TestGame(unittest.TestCase):
     def test_end_game_if_the_snake_hits_a_wall(self):
