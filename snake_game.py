@@ -3,6 +3,7 @@
 import copy
 import time
 import tty, termios
+import random
 import select
 import sys
 
@@ -28,7 +29,6 @@ class Map(object):
         self.grid = self.new_grid()
 
     def update(self, positions, char='O'):
-        self.clear()
         for pos in positions:
             x = pos[0]
             y = pos[1]
@@ -85,6 +85,7 @@ class Game(object):
         self.snake = Snake()
         self.map = Map()
         self.timeout = 0.3 # in seconds
+        self.fruit_position = self.random_fruit_position()
 
     @property
     def invalid_position(self):
@@ -147,7 +148,13 @@ class Game(object):
 
         return key
 
+    def random_fruit_position(self):
+        x = random.randint(0, self.map.width - 1) # randint is inclusive
+        y = random.randint(0, self.map.height - 1)
+        return [x, y]
+
     def play(self):
+        self.map.update([self.fruit_position], 'x')
         self.map.update(self.snake.positions)
         self.map.draw()
 
@@ -177,6 +184,8 @@ class Game(object):
             if self.invalid_position:
                 raise GameOver("You've hit a wall. Your game is over!\n")
 
+            self.map.clear()
+            self.map.update([self.fruit_position], 'x')
             self.map.update(self.snake.positions)
             self.map.draw()
 
