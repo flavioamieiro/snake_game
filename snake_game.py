@@ -232,6 +232,7 @@ class Game(object):
             self.map.clear()
             self.map.update([self.fruit_position], 'x')
             self.map.update(self.snake.positions)
+            sys.stdout.write("\nh: left | j: down | k: up | l: right\n")
             self.map.draw()
 
 
