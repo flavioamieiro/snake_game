@@ -2,6 +2,7 @@
 
 import copy
 import time
+import tty, termios
 import sys
 
 class GameOver(Exception):
@@ -113,20 +114,58 @@ class Game(object):
 
         return False
 
+    def read_key(self):
+        """
+        Read a key from stdin without having to press enter. This
+        means putting the tty in Raw mode, and then setting it back to
+        it's original state so we can print stuff out without problems.
+
+        man 3 termios has more details on how this works.
+        """
+        # get current tty attributes so we can restore them later
+        old_tty_attr = termios.tcgetattr(sys.stdin)
+
+        # set the tty to raw mode (input is available character by
+        # character, echoing is disabled and special processing of
+        # term input and output is disabled.
+        tty.setraw(sys.stdin)
+
+        # get the key
+        key = sys.stdin.read(1)
+
+        # return to old attributes after everything from fd was read
+        # (TCSADRAIN)
+        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_tty_attr)
+
+        return key
+
     def play(self):
         self.map.update(self.snake.positions)
         self.map.draw()
 
         while True:
             sys.stdout.write('\n')
-            self.snake.move_down()
+
+            keymap = {
+                'h': 'left',
+                'j': 'down',
+                'k': 'up',
+                'l': 'right',
+            }
+
+            key = self.read_key()
+            try:
+                new_direction = keymap[key]
+            except KeyError:
+                new_direction = self.snake.direction
+
+            self.snake.move(new_direction)
 
             if self.invalid_position:
                 raise GameOver("You've hit a wall. Your game is over!\n")
 
             self.map.update(self.snake.positions)
             self.map.draw()
-            time.sleep(1)
 
 
 if __name__ == '__main__':

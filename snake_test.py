@@ -81,6 +81,9 @@ class TestGame(unittest.TestCase):
     def test_end_game_if_the_snake_hits_a_wall(self):
         game = Game()
         game.snake.positions = [[5, 7], [5, 8], [5, 9]]
+
+        game.read_key = lambda: 'j' # poor man's mock
+
         with self.assertRaises(GameOver):
             game.play()
 
