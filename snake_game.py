@@ -53,16 +53,16 @@ class Snake(object):
     def __init__(self):
         self.positions = [[5, 3], [5, 4], [5, 5]]
 
-    def move_down(self):
+    def move(self, new_direction):
         tail = self.positions.pop(0) # remove the 'tail'
         previous_head = self.positions[-1]
-        new_head = [previous_head[0], (previous_head[1] + 1)]
-        self.positions.append(new_head)
 
-    def move_left(self):
-        tail = self.positions.pop(0) # remove the 'tail'
-        previous_head = self.positions[-1]
-        new_head = [(previous_head[0] - 1), previous_head[1]]
+        if new_direction == 'down':
+            new_head = [previous_head[0], (previous_head[1] + 1)]
+
+        elif new_direction == 'left':
+            new_head = [(previous_head[0] - 1), previous_head[1]]
+
         self.positions.append(new_head)
 
 
