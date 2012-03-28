@@ -139,6 +139,11 @@ class Game(object):
         self.timeout = TIMEOUT
         self.fruit_position = self.random_fruit_position()
         self.keymap = keymap
+        self.level = 1
+
+    @property
+    def snake_hits_the_fruit(self):
+        return self.map.grid[self.snake.head_y][self.snake.head_x] == 'x'
 
     @property
     def invalid_position(self):
@@ -209,6 +214,16 @@ class Game(object):
         y = random.randint(0, self.map.height - 1)
         return [x, y]
 
+    def level_up(self):
+        self.snake.grow()
+        self.fruit_position = self.random_fruit_position()
+        self.timeout = self.timeout - 0.001
+        self.level += 1
+
+    def show_level(self):
+        width = (self.map.width - (self.level // 10) - 1)
+        sys.stdout.write('{0:>{width}}{level}'.format('Level: ', level=self.level, width=width))
+
     def show_keymap(self):
         output = "\n| "
         for key, value in self.keymap.items():
@@ -241,15 +256,15 @@ class Game(object):
             if self.invalid_position:
                 raise GameOver("Game Over!\n")
 
-            if self.map.grid[self.snake.head_y][self.snake.head_x] == 'x':
-                self.snake.grow()
-                self.fruit_position = self.random_fruit_position()
+            if self.snake_hits_the_fruit:
+                self.level_up()
 
             self.map.clear()
             self.map.update([self.fruit_position], 'x')
             self.map.update(self.snake.positions)
             self.show_keymap()
             self.map.draw()
+            self.show_level()
 
 
 if __name__ == '__main__':
