@@ -135,24 +135,25 @@ class Game(object):
         # term input and output is disabled.
         tty.setraw(sys.stdin)
 
-        # get the key (using select for timeout) select() needs three
-        # lists of file descriptors to poll, and an optional
-        # timeout. It returns a tuple of three lists of fd's as soon
-        # as one of them has seen some action, or 'timeout' has
-        # passed.
-        inpt, outpt, excpt = select.select([sys.stdin], [], [], self.timeout)
+        try:
+            # get the key (using select for timeout) select() needs three
+            # lists of file descriptors to poll, and an optional
+            # timeout. It returns a tuple of three lists of fd's as soon
+            # as one of them has seen some action, or 'timeout' has
+            # passed.
+            inpt, outpt, excpt = select.select([sys.stdin], [], [], self.timeout)
 
-        # we need to check if there was input
-        if inpt:
-            key = inpt[0].read(1)
-        # or the timeout was reached (and we pretend a 'random' key
-        # was pressed)
-        else:
-            key = '?'
-
-        # return to old attributes after everything from fd was read
-        # (TCSADRAIN)
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_tty_attr)
+            # we need to check if there was input
+            if inpt:
+                key = inpt[0].read(1)
+            # or the timeout was reached (and we pretend a 'random' key
+            # was pressed)
+            else:
+                key = '?'
+        finally:
+            # return to old attributes after everything from fd was read
+            # (TCSADRAIN)
+            termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_tty_attr)
 
         return key
 
