@@ -28,6 +28,8 @@ import random
 import select
 import sys
 
+TIMEOUT = 0.1 # in seconds
+
 class GameOver(Exception):
     pass
 
@@ -120,7 +122,7 @@ class Game(object):
     def __init__(self):
         self.snake = Snake()
         self.map = Map()
-        self.timeout = 0.3 # in seconds
+        self.timeout = TIMEOUT
         self.fruit_position = self.random_fruit_position()
 
     @property
