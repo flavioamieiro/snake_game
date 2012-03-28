@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import copy
+import time
 import sys
 
 class GameOver(Exception):
@@ -67,6 +68,7 @@ class Game(object):
             except IndexError:
                 raise GameOver("You've hit a wall. Your game is over!\n")
             self.map.draw()
+            time.sleep(1)
 
 
 if __name__ == '__main__':
