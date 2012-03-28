@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
 import sys
+
+class GameOver(Exception):
+    pass
+
 class Map(object):
     grid = [
         ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
@@ -38,10 +42,29 @@ class Snake(object):
             pos[1] += 1
             self.positions[n] = pos
 
+
+class Game(object):
+    def __init__(self):
+        self.snake = Snake()
+        self.map = Map()
+
+    def play(self):
+        self.map.update(self.snake.positions)
+        self.map.draw()
+
+        while True:
+            self.snake.move_down()
+            try:
+                self.map.update(self.snake.positions)
+            except IndexError:
+                raise GameOver("You've hit a wall. Your game is over!\n")
+            self.map.draw()
+            sys.stdout.write('\n')
+
+
 if __name__ == '__main__':
-    snake = Snake()
-    snake_map = Map()
-    while True:
-        snake.move_down()
-        snake_map.update(snake.positions)
-        snake_map.draw()
+    game = Game()
+    try:
+        game.play()
+    except GameOver as exc:
+        sys.stdout.write(str(exc))
