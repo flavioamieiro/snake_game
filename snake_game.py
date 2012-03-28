@@ -3,6 +3,7 @@
 import copy
 import time
 import tty, termios
+import select
 import sys
 
 class GameOver(Exception):
@@ -93,6 +94,7 @@ class Game(object):
     def __init__(self):
         self.snake = Snake()
         self.map = Map()
+        self.timeout = 0.3 # in seconds
 
     @property
     def invalid_position(self):
@@ -121,6 +123,9 @@ class Game(object):
         it's original state so we can print stuff out without problems.
 
         man 3 termios has more details on how this works.
+
+        We're also using select (man 3 select) so we can set a timeout
+        for how long we'll wait for stdin.
         """
         # get current tty attributes so we can restore them later
         old_tty_attr = termios.tcgetattr(sys.stdin)
@@ -130,8 +135,20 @@ class Game(object):
         # term input and output is disabled.
         tty.setraw(sys.stdin)
 
-        # get the key
-        key = sys.stdin.read(1)
+        # get the key (using select for timeout) select() needs three
+        # lists of file descriptors to poll, and an optional
+        # timeout. It returns a tuple of three lists of fd's as soon
+        # as one of them has seen some action, or 'timeout' has
+        # passed.
+        inpt, outpt, excpt = select.select([sys.stdin], [], [], self.timeout)
+
+        # we need to check if there was input
+        if inpt:
+            key = inpt[0].read(1)
+        # or the timeout was reached (and we pretend a 'random' key
+        # was pressed)
+        else:
+            key = '?'
 
         # return to old attributes after everything from fd was read
         # (TCSADRAIN)
