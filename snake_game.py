@@ -68,6 +68,9 @@ class Snake(object):
             tail = self.positions.pop(0) # remove the 'tail'
             previous_head = self.positions[-1]
 
+            if new_direction == 'up':
+                new_head = [previous_head[0], (previous_head[1] - 1)]
+
             if new_direction == 'down':
                 new_head = [previous_head[0], (previous_head[1] + 1)]
 
