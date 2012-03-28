@@ -98,6 +98,7 @@ class TestGame(unittest.TestCase):
 
     def test_invalid_position_with_y_outside_map_through_the_bottom(self):
         game = Game()
+        game.map.height = 10
         game.snake.positions[0] = [10, 2]
         self.assertTrue(game.invalid_position)
 
@@ -108,6 +109,7 @@ class TestGame(unittest.TestCase):
 
     def test_invalid_position_with_x_outside_map_through_the_right(self):
         game = Game()
+        game.map.width = 10
         game.snake.positions[0] = [5, 10]
         self.assertTrue(game.invalid_position)
 

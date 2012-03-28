@@ -10,32 +10,22 @@ class GameOver(Exception):
     pass
 
 class Map(object):
-    initial_grid = [
-        ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
-        ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
-        ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
-        ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
-        ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
-        ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
-        ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
-        ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
-        ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
-        ['.', '.', '.', '.', '.', '.', '.', '.', '.', '.'],
-        ]
+    width = 40
+    height = 40
 
     def __init__(self):
-        self.grid = copy.deepcopy(self.initial_grid)
+        self.grid = self.new_grid()
 
-    @property
-    def width(self):
-        return len(self.grid[0])
-
-    @property
-    def height(self):
-        return len(self.grid)
+    def new_grid(self):
+        grid = []
+        for i in range(self.height):
+            grid.append([])
+            for j in range(self.width):
+                grid[i].append('.')
+        return grid
 
     def clear(self):
-        self.grid = copy.deepcopy(self.initial_grid)
+        self.grid = self.new_grid()
 
     def update(self, positions, char='O'):
         self.clear()
