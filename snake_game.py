@@ -50,20 +50,31 @@ class Map(object):
 
 
 class Snake(object):
-    def __init__(self, initial_positions=None):
-        self.positions = initial_positions or [[5, 3], [5, 4], [5, 5]]
+    def __init__(self, initial_positions=None, direction='down'):
+        self.positions = copy.deepcopy(initial_positions) or [[5, 3], [5, 4], [5, 5]]
+        self.direction = direction
+
+    def direction_conflicts(self, new_direction):
+        if (self.direction == 'left') and (new_direction == 'right'):
+            return True
+        else:
+            return False
 
     def move(self, new_direction):
-        tail = self.positions.pop(0) # remove the 'tail'
-        previous_head = self.positions[-1]
+        if not self.direction_conflicts(new_direction):
+            tail = self.positions.pop(0) # remove the 'tail'
+            previous_head = self.positions[-1]
 
-        if new_direction == 'down':
-            new_head = [previous_head[0], (previous_head[1] + 1)]
+            if new_direction == 'down':
+                new_head = [previous_head[0], (previous_head[1] + 1)]
 
-        elif new_direction == 'left':
-            new_head = [(previous_head[0] - 1), previous_head[1]]
+            elif new_direction == 'left':
+                new_head = [(previous_head[0] - 1), previous_head[1]]
 
-        self.positions.append(new_head)
+            elif new_direction == 'right':
+                new_head = [(previous_head[0] + 1), previous_head[1]]
+
+            self.positions.append(new_head)
 
 
 class Game(object):

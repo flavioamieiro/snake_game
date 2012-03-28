@@ -27,6 +27,17 @@ class TestSnake(unittest.TestCase):
         snake.move('left')
         self.assertEqual(snake.positions, [[5, 4], [5, 5], [4, 5]])
 
+    def test_move_snake_right_from_initial_position(self):
+        snake = Snake()
+        snake.move('right')
+        self.assertEqual(snake.positions, [[5, 4], [5, 5], [6, 5]])
+
+    def test_cant_move_right_if_going_left(self):
+        positions = [[6, 3], [5, 3], [4, 3]]
+        snake = Snake(initial_positions=positions, direction='left')
+        snake.move('right')
+        self.assertEqual(snake.positions, positions) # nothing happened
+
 
 class TestGame(unittest.TestCase):
     def test_end_game_if_the_snake_hits_a_wall(self):
