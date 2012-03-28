@@ -12,6 +12,12 @@ class TestSnake(unittest.TestCase):
         snake.move_down()
         self.assertEqual(snake.positions, [[5, 4], [5, 5], [5, 6]])
 
+    def test_move_horizontal_snake_down(self):
+        snake = Snake()
+        snake.positions = [[4, 3], [5, 3], [6, 3]]
+        snake.move_down()
+        self.assertEqual(snake.positions, [[5, 3], [6, 3], [6, 4]])
+
     def test_move_snake_left_from_initial_position(self):
         snake = Snake()
         snake.move_left()

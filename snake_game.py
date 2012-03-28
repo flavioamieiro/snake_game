@@ -54,9 +54,10 @@ class Snake(object):
         self.positions = [[5, 3], [5, 4], [5, 5]]
 
     def move_down(self):
-        for n, pos in enumerate(self.positions):
-            pos[1] += 1
-            self.positions[n] = pos
+        tail = self.positions.pop(0) # remove the 'tail'
+        previous_head = self.positions[-1]
+        new_head = [previous_head[0], (previous_head[1] + 1)]
+        self.positions.append(new_head)
 
     def move_left(self):
         tail = self.positions.pop(0) # remove the 'tail'
